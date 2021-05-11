@@ -6,6 +6,8 @@ Neversink's filters are only used as test cases. I hold no copyright to them.
 
 ## Example
 
+The following code was taken from the ParserExample project.
+
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -23,19 +25,7 @@ public static void Main(string[] args)
 	string filename = "myfilter.filter";
 	PrintFile(filename);
 	Console.WriteLine();
-	Console.WriteLine("Rules printed.");
 	Console.WriteLine("Press any key to continue...");			
-	Console.ReadLine();
-	Console.Clear();
-	PrintBlocks(filename);
-	Console.WriteLine();
-	Console.WriteLine("Blocks printed.");
-	Console.WriteLine("Press any key to continue...");
-	Console.ReadLine();
-	Console.Clear();
-	PrintSortedBlocks(filename);
-	Console.WriteLine("Sorted blocks printed.");
-	Console.WriteLine("Press any key to continue...");
 	Console.ReadLine();
 }
 
@@ -77,81 +67,6 @@ private static void PrintFile(string filename, int maxRuleLength = 100)
 
 			rule = parser.Next();
 		}
-	}
-}
-
-
-private static void PrintBlocks(string filename, int maxRuleLength = 80)
-{
-	PoeFilterFile poeFile;
-	using (TextReader reader = File.OpenText(filename)) {
-		PoeFilterParser parser = new PoeFilterParser();
-		poeFile = parser.Parse(reader);
-	}
-
-	for (int i = 0; i < poeFile.Blocks.Count; i++) {
-		RuleBlock block = poeFile.Blocks[i];
-		// A FilterBlock includes a group of rules after a Show/Hide.
-		// It will also include some comments before and after the rule
-		if (block.Rules.Count == 0)
-			throw new InvalidOperationException(block.Name ?? "");
-
-		foreach (IFilterRule rule in block.Rules) {
-			string text = rule.ToString();
-			if (rule.Type != FilterType.WhiteSpace && rule.Type != FilterType.Show && rule.Type != FilterType.Hide && rule.Type != FilterType.DisabledBlock) {
-				text = "\t  " + text;
-			}
-			else
-				text = "  " + text;
-			if (text.Length > maxRuleLength)
-				text = text.Substring(0, maxRuleLength - 3) + "...";
-			Console.WriteLine(text);
-		}
-		Console.WriteLine("-");
-	}
-}
-
-private static void PrintSortedBlocks(string filename, int maxRuleLength = 80)
-{
-	PoeFilterFile poeFile;
-	using (TextReader reader = File.OpenText(filename)) {
-		PoeFilterParser parser = new PoeFilterParser();
-		poeFile = parser.Parse(reader);
-	}
-
-	for (int i = 0; i < poeFile.Blocks.Count; i++) {
-		RuleBlock block = poeFile.Blocks[i];
-		// A FilterBlock includes a group of rules after a Show/Hide.
-		// It will also include some comments before and after the rule
-		if (block.Rules.Count == 0)
-			throw new InvalidOperationException(block.Name ?? "");
-
-		// Rules can be categorized into WhiteSpace, Blocks, Criteria, Actions, and Errors
-		// See: https://www.pathofexile.com/item-filter/about
-		if (block.IsDisabled) {
-			List<IFilterRule> rules = block.Rules.Where(r => r.Type != FilterType.WhiteSpace && ((DisabledBlock) r).Rule.Type != FilterType.WhiteSpace)
-					.OrderBy(x => ((DisabledBlock) x).Rule.Type).ToList();
-			foreach (IFilterRule rule in rules) {
-				string text = rule.ToString();
-				if (text.Length > maxRuleLength)
-					text = text.Substring(0, maxRuleLength - 3) + "...";
-				Console.WriteLine(text);
-			}
-		}
-		else {
-			List<IFilterRule> rules = block.Rules.Where(r => r.Type != FilterType.WhiteSpace).OrderBy(x => x.Type).ToList();
-			string text = rules[0].ToString();
-			if (text.Length > maxRuleLength)
-				text = text.Substring(0, maxRuleLength - 3) + "...";
-			Console.WriteLine(text);
-			foreach (IFilterRule rule in rules.Skip(1)) {
-				text = "\t" + rule.ToString();
-				if (text.Length > maxRuleLength - 1)
-					text = text.Substring(0, maxRuleLength - 4) + "...";
-				Console.WriteLine(text);
-			}
-		}
-		Console.WriteLine();
 	}
 }
 
