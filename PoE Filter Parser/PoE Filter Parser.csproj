@@ -9,10 +9,10 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageTags></PackageTags>
     <PackageLicense>Apache-2.0</PackageLicense>
-    <PackageProjectUrl>https://github.com/ffhighwind/Fasterflect</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ffhighwind/Path-of-Exile-Filter-Parser</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>Copyright (c) Wesley Hamilton</Copyright>
-    <RepositoryUrl>https://github.com/ffhighwind/Path-of-Exile-Utilities</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ffhighwind/Path-of-Exile-Filter-Parser</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
