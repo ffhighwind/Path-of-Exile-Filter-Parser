@@ -37,35 +37,34 @@ private static void PrintFile(string filename, int maxRuleLength = 100)
 
 		// Note: parser.Next() is naive and will not find all errors.
 		// Use parser.Parse(filename) to ensure that all errors are picked up.
-		IFilterRule rule = parser.Next();
-		while (rule != null) {
-			string ruleType;
+		IFilterRule rule;
+		while ((rule = parser.Next()) != null) {
+			string ruleType = rule.Type.ToString();
 			string ruleText = rule.ToString();
-			if (rule.Type == FilterType.WhiteSpace)
-				ruleType = "";
-			else if (rule.Type == FilterType.DisabledBlock) {
-				DisabledBlock disabledBlock = (DisabledBlock) rule;
-				ruleType = "#" + disabledBlock.Rule.Type;
-			}
-			else if (rule.Type == FilterType.ParseError) {
-				ParseError parseError = (ParseError) rule;
-				ruleType = $"!!! ERROR !!!";
-				if (parseError.Column > 0)
-					ruleText = "..." + ruleText.Substring(parseError.Column);
-			}
-			else {
-				ruleType = rule.Type.ToString();
-				if (rule is IFilterCriteria _ || rule is IFilterAction _)
+			switch (rule.Type) {
+				case FilterType.WhiteSpace:
+					ruleType = "";
+					break;
+				case FilterType.DisabledBlock:
+					DisabledBlock disabledBlock = (DisabledBlock) rule;
+					ruleType = "#" + disabledBlock.Rule.Type;
+					break;
+				case FilterType.ParseError:
+					ParseError parseError = (ParseError) rule;
+					if (parseError.Column > 0)
+						ruleText = "..." + ruleText.Substring(parseError.Column);
+					break;
+				case FilterType.Show:
+				case FilterType.Hide:
+					break;
+				default:
 					ruleText = "\t" + ruleText;
-				else if (rule.Type != FilterType.Show && rule.Type != FilterType.Hide)
-					throw new InvalidOperationException();
+					break;
 			}
 			ruleText = $"{ parser.LineNumber,-5} {ruleType,-22} {ruleText}";
 			if (ruleText.Length > maxRuleLength)
 				ruleText = ruleText.Substring(0, maxRuleLength - 3) + "...";
 			Console.WriteLine(ruleText);
-
-			rule = parser.Next();
 		}
 	}
 }

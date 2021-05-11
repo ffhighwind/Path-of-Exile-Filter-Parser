@@ -39,35 +39,34 @@ namespace PathOfExile
 
 				// Note: parser.Next() is naive and will not find all errors.
 				// Use parser.Parse(filename) to ensure that all errors are picked up.
-				IFilterRule rule = parser.Next();
-				while (rule != null) {
-					string ruleType;
+				IFilterRule rule;
+				while ((rule = parser.Next()) != null) {
+					string ruleType = rule.Type.ToString();
 					string ruleText = rule.ToString();
-					if (rule.Type == FilterType.WhiteSpace)
-						ruleType = "";
-					else if (rule.Type == FilterType.DisabledBlock) {
-						DisabledBlock disabledBlock = (DisabledBlock) rule;
-						ruleType = "#" + disabledBlock.Rule.Type;
-					}
-					else if (rule.Type == FilterType.ParseError) {
-						ParseError parseError = (ParseError) rule;
-						ruleType = $"!!! ERROR !!!";
-						if (parseError.Column > 0)
-							ruleText = "..." + ruleText.Substring(parseError.Column);
-					}
-					else {
-						ruleType = rule.Type.ToString();
-						if (rule is IFilterCriteria _ || rule is IFilterAction _)
+					switch (rule.Type) {
+						case FilterType.WhiteSpace:
+							ruleType = "";
+							break;
+						case FilterType.DisabledBlock:
+							DisabledBlock disabledBlock = (DisabledBlock) rule;
+							ruleType = "#" + disabledBlock.Rule.Type;
+							break;
+						case FilterType.ParseError:
+							ParseError parseError = (ParseError) rule;
+							if (parseError.Column > 0)
+								ruleText = "..." + ruleText.Substring(parseError.Column);
+							break;
+						case FilterType.Show:
+						case FilterType.Hide:
+							break;
+						default:
 							ruleText = "\t" + ruleText;
-						else if (rule.Type != FilterType.Show && rule.Type != FilterType.Hide)
-							throw new InvalidOperationException();
+							break;
 					}
 					ruleText = $"{ parser.LineNumber,-5} {ruleType,-22} {ruleText}";
 					if (ruleText.Length > maxRuleLength)
 						ruleText = ruleText.Substring(0, maxRuleLength - 3) + "...";
 					Console.WriteLine(ruleText);
-
-					rule = parser.Next();
 				}
 			}
 		}
@@ -85,16 +84,20 @@ namespace PathOfExile
 				RuleBlock block = poeFile.Blocks[i];
 				// A FilterBlock includes a group of rules after a Show/Hide.
 				// It will also include some comments before and after the rule
-				if (block.Rules.Count == 0)
-					throw new InvalidOperationException(block.Name ?? "");
 
 				foreach (IFilterRule rule in block.Rules) {
 					string text = rule.ToString();
-					if (rule.Type != FilterType.WhiteSpace && rule.Type != FilterType.Show && rule.Type != FilterType.Hide && rule.Type != FilterType.DisabledBlock) {
-						text = "\t  " + text;
+					switch (rule.Type) {
+						case FilterType.DisabledBlock:
+						case FilterType.WhiteSpace:
+						case FilterType.Show:
+						case FilterType.Hide:
+							text = "  " + text;
+							break;
+						default:
+							text = "\t  " + text;
+							break;
 					}
-					else
-						text = "  " + text;
 					if (text.Length > maxRuleLength)
 						text = text.Substring(0, maxRuleLength - 3) + "...";
 					Console.WriteLine(text);
@@ -111,37 +114,25 @@ namespace PathOfExile
 				poeFile = parser.Parse(reader);
 			}
 
-			for (int i = 0; i < poeFile.Blocks.Count; i++) {
-				RuleBlock block = poeFile.Blocks[i];
-				// A FilterBlock includes a group of rules after a Show/Hide.
-				// It will also include some comments before and after the rule
-				if (block.Rules.Count == 0)
-					throw new InvalidOperationException(block.Name ?? "");
-
+			foreach (RuleBlock block in poeFile.Blocks) {
 				// Rules can be categorized into WhiteSpace, Blocks, Criteria, Actions, and Errors
 				// See: https://www.pathofexile.com/item-filter/about
+				List<IFilterRule> rules = block.Rules;
 				if (block.IsDisabled) {
-					List<IFilterRule> rules = block.Rules.Where(r => r.Type != FilterType.WhiteSpace && ((DisabledBlock) r).Rule.Type != FilterType.WhiteSpace)
-							.OrderBy(x => ((DisabledBlock) x).Rule.Type).ToList();
-					foreach (IFilterRule rule in rules) {
-						string text = rule.ToString();
-						if (text.Length > maxRuleLength)
-							text = text.Substring(0, maxRuleLength - 3) + "...";
-						Console.WriteLine(text);
-					}
+					rules = rules.Where(r => r.Type != FilterType.WhiteSpace).Select(r => ((DisabledBlock) r).Rule)
+						.Where(r => r.Type != FilterType.WhiteSpace).OrderBy(r => r.Type).ToList();
 				}
 				else {
-					List<IFilterRule> rules = block.Rules.Where(r => r.Type != FilterType.WhiteSpace).OrderBy(x => x.Type).ToList();
-					string text = rules[0].ToString();
+					rules = block.Rules.Where(r => r.Type != FilterType.WhiteSpace).OrderBy(r => r.Type).ToList();
+				}
+
+				foreach (string line in rules.Select(r => r.Type == FilterType.Show || r.Type == FilterType.Hide ? r.ToString() : "\t" + r.ToString())) {
+					string text = line;
 					if (text.Length > maxRuleLength)
-						text = text.Substring(0, maxRuleLength - 3) + "...";
+						text = line.Substring(0, maxRuleLength - 3) + "...";
+					if (block.IsDisabled)
+						Console.Write("#");
 					Console.WriteLine(text);
-					foreach (IFilterRule rule in rules.Skip(1)) {
-						text = "\t" + rule.ToString();
-						if (text.Length > maxRuleLength - 1)
-							text = text.Substring(0, maxRuleLength - 4) + "...";
-						Console.WriteLine(text);
-					}
 				}
 				Console.WriteLine();
 			}
