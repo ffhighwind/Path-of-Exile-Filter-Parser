@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net45;net35;netstandard2.0</TargetFrameworks>
+    <AssemblyName>Fasterflect.Reflect</AssemblyName>
+    <Version>1.0.0</Version>
+    <Authors>Wesley Hamilton</Authors>
+    <Description></Description>
+    <NeutralLanguage>en-us</NeutralLanguage>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageTags></PackageTags>
+    <PackageLicense>Apache-2.0</PackageLicense>
+    <PackageProjectUrl>https://github.com/ffhighwind/Fasterflect</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>Copyright (c) Wesley Hamilton</Copyright>
+    <RepositoryUrl>https://github.com/ffhighwind/Path-of-Exile-Utilities</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Configurations>Debug;Release</Configurations>
+    <NoWarn>1701;1702</NoWarn>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|netstandard2.0'">
+    <OutputPath>bin\lib\</OutputPath>
+    <DocumentationFile>bin\lib\Fasterflect.Reflect.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD;NETSTANDARD1_3</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net45'">
+    <OutputPath>bin\lib\</OutputPath>
+    <DocumentationFile>bin\lib\Fasterflect.Reflect.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
+    <DefineConstants>NETFRAMEWORK;NET45</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net35'">
+    <OutputPath>bin\lib\</OutputPath>
+    <DocumentationFile>bin\lib\Fasterflect.Reflect.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='net35'">
+    <DefineConstants>NETFRAMEWORK;NET35</DefineConstants>
+  </PropertyGroup>
+</Project>

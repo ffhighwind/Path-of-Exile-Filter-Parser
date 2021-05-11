@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserTest", "ParserTest\ParserTest.csproj", "{56FC5668-3868-41C6-85C6-F549E4559B96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserExample", "ParserExample\ParserExample.csproj", "{938B5D10-45B1-4BE9-BB5C-4AA1E6A20D9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PoE Filter Parser", "PoE Filter Parser\PoE Filter Parser.csproj", "{235BBFDC-A4F7-45A9-84F6-C81DD6654134}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{56FC5668-3868-41C6-85C6-F549E4559B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56FC5668-3868-41C6-85C6-F549E4559B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56FC5668-3868-41C6-85C6-F549E4559B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56FC5668-3868-41C6-85C6-F549E4559B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{938B5D10-45B1-4BE9-BB5C-4AA1E6A20D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{938B5D10-45B1-4BE9-BB5C-4AA1E6A20D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{938B5D10-45B1-4BE9-BB5C-4AA1E6A20D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{938B5D10-45B1-4BE9-BB5C-4AA1E6A20D9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235BBFDC-A4F7-45A9-84F6-C81DD6654134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235BBFDC-A4F7-45A9-84F6-C81DD6654134}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235BBFDC-A4F7-45A9-84F6-C81DD6654134}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235BBFDC-A4F7-45A9-84F6-C81DD6654134}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AC6E5AC-22DA-46A7-A59A-648A8DD041BB}
+	EndGlobalSection
+EndGlobal
