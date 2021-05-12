@@ -2,8 +2,6 @@
 
 This is a parser for Path of Exile's loot filters that performs a simple syntax validation. It will not validate Classes, BaseTypes, Prophecies, Enchantments, mods, etc. These validations may be added in the future.
 
-Neversink's filters are only used as test cases. I hold no copyright to them.
-
 ## Example
 
 The following code was taken from the ParserExample project.
